@@ -1,0 +1,26 @@
+<div class="labseq-container">
+  <h2>LabSeq Calculator</h2>
+
+  <div class="input-group">
+    <input
+      type="number"
+      [(ngModel)]="inputValue"
+      placeholder="Enter a non-negative number"
+      min="0"
+    />
+    <button (click)="fetchLabSeq()">Get LabSeq</button>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="result !== null" class="result-container">
+    <div>
+      LabSeq(<span class="input-value">{{ inputValue }}</span>) =
+    </div>
+    <div class="result-value">{{ result }}</div>
+    <div class="calc-time">Calculated in <strong>{{ time }} ms</strong></div>
+  </div>
+</div>
+

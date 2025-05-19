@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  backend:
+    image: labseq-backend
+    build:
+      context: ./labseq
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+
+  frontend:
+    image: labseq-frontend
+    build:
+      context: ./frontend/angular-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+    depends_on:
+      - backend
