@@ -4,6 +4,13 @@ import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
 import ex.quarkus.models.Result;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.GET;
@@ -15,6 +22,7 @@ import jakarta.ws.rs.core.Response;
 
 @Path("/labseq")
 @ApplicationScoped
+@Tag(name="LabSeq API",description="LabSeq sequence calculations")
 public class Api{
 
     //em vez de dar sort para descobrir a maior key, dar track é menos custoso
@@ -66,6 +74,24 @@ public class Api{
     @GET
     @Path("/{n}")
     @Produces(MediaType.APPLICATION_JSON)
+    @Operation(
+        summary = "Get LabSeq Value",
+        description = "Calculates the LabSeq value for a given index n, where l(n) = l(n-4) + l(n-3) with base cases l(0)=0, l(1)=1, l(2)=0, l(3)=1"
+    )
+    @APIResponses({
+        @APIResponse(
+            responseCode = "200",
+            description = "Successful operation",
+            content = @Content(
+                mediaType = MediaType.APPLICATION_JSON,
+                schema = @Schema(implementation = Result.class)
+            )
+        ),
+        @APIResponse(
+            responseCode = "400",
+            description = "Invalid input - negative index"
+        ),
+    })
     public Response getLabSeq(@PathParam("n") int n){
         if(n<0){
             throw new IllegalArgumentException("Negative index not allowed: " + n);
